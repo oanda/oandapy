@@ -26,23 +26,20 @@ Examples
 ======
 
 ### Get price for an instrument
-	
 	response = oanda.get_prices(instruments="EUR_USD")
-
 	prices = response.get("prices")
-
 	asking_price = prices[0].get("ask")
 
 ### Open a limit order
-
 	# required datetime functions
 	from datetime import datetime, timedelta
 
 	# sample account_id
 	account_id = 1813880
 
-	expiry_date = datetime.now() + timedelta(days=1)
-	expiry_date = trade_expire.isoformat("T") + "Z"
+        # set the trade to expire after one day
+	trade_expire = datetime.now() + timedelta(days=1)
+	trade_expire = trade_expire.isoformat("T") + "Z"
 
 	response = oanda.create_order(account_id, 
 	    instrument="USD_CAD",
