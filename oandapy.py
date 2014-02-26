@@ -1,7 +1,4 @@
 import json
-import urllib
-import urlparse
-
 import requests
 
 """ OANDA API wrapper for OANDA's REST API """
@@ -169,12 +166,10 @@ class EndpointsMixin(object):
 """ Provides functionality for access to core OANDA API calls """
 
 class API(EndpointsMixin, object):
-    def __init__(self, environment="sandbox", app_key=None, access_token=None, token_type='bearer'):
+    def __init__(self, environment="sandbox", access_token=None):
         """Instantiates an instance of OandaPy
-
         :param environment: (optional) Provide the environment for oanda's REST api, either 'sandbox', 'practice', or 'live'. Default: sandbox
         :param access_token: (optional) Provide a valid access token if you have one. This is required if the environment is not sandbox.
-        :param token_type: (optional) Provide your token type. Default: bearer
         """
 
         if environment == 'sandbox':
@@ -185,15 +180,11 @@ class API(EndpointsMixin, object):
             self.api_url = 'https://api-fxtrade.oanda.com'
 
         self.access_token = access_token
-        self.token_type = token_type
         self.client = requests.Session()
         
         #personal token authentication
         if self.access_token:
             self.client.headers['Authorization'] = 'Bearer ' + self.access_token
-
-    def set_credentials(self, account_id):
-        self._account_id = account_id
 
     def request(self, endpoint, method='GET', params=None):
         """Returns dict of response from OANDA's open API
