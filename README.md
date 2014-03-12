@@ -37,7 +37,7 @@ Examples
 	# sample account_id
 	account_id = 1813880
 
-        # set the trade to expire after one day
+	# set the trade to expire after one day
 	trade_expire = datetime.now() + timedelta(days=1)
 	trade_expire = trade_expire.isoformat("T") + "Z"
 
@@ -49,3 +49,31 @@ Examples
 	    price=1.15,
 	    expiry=trade_expire
 	)
+
+Rates Streaming
+======
+Create a custom streamer class to setup how you want to handle the data. 
+Each tick is sent through the `on_success` and `on_error` functions.
+You can override these functions to handle the streaming data.
+
+The following example prints the first 10 ticks from the stream then disconnects.
+
+    class MyStreamer(oandapy.Streamer):
+        def __init__(self, *args, **kwargs):
+            oandapy.Streamer.__init__(self, *args, **kwargs)
+            self.ticks = 0
+
+        def on_success(self, data):
+            self.ticks += 1
+            print data
+            if self.ticks == 10:
+                self.disconnect()
+
+        def on_error(self, data):
+            self.disconnect()
+
+Initialize an instance of your custom streamer, and start connecting to the stream.
+See http://developer.oanda.com/docs/v1/stream/#rates-streaming for further documentation.
+
+    stream = MyStreamer(environment="practice", access_token="abcdefghijk...")
+    stream.start(accountId=12345, instruments="EUR_USD,USD_CAD")
