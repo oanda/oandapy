@@ -24,14 +24,14 @@ class EndpointsMixin(object):
         """ Get current prices
         Docs: http://developer.oanda.com/docs/v1/rates/#get-current-prices
         """
-        endpoint  = 'v1/quote'
+        endpoint  = 'v1/prices'
         return self.request(endpoint, params=params)
 
     def get_history(self, **params):
         """ Retrieve instrument history
         Docs: http://developer.oanda.com/docs/v1/rates/#retrieve-instrument-history
         """
-        endpoint  = 'v1/history'
+        endpoint  = 'v1/candles'
         return self.request(endpoint, params=params)
 
     """Accounts"""
