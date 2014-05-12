@@ -90,7 +90,7 @@ class EndpointsMixin(object):
     def close_order(self, account_id, order_id, **params):
         """ Close an order
         Docs: http://developer.oanda.com/docs/v1/orders/#close-an-order
-        """ 
+        """
         endpoint = 'v1/accounts/%s/orders/%s' % (account_id, order_id)
         return self.request(endpoint, "DELETE", params=params)
 
@@ -161,7 +161,7 @@ class EndpointsMixin(object):
         Docs: http://developer.oanda.com/docs/v1/transactions/#get-information-for-a-transaction
         """
         endpoint = 'v1/accounts/%s/transactions/%s' % (account_id, transaction_id)
-        return self.request(endpoint, params=params)
+        return self.request(endpoint)
 
 """ Provides functionality for access to core OANDA API calls """
 
@@ -181,7 +181,7 @@ class API(EndpointsMixin, object):
 
         self.access_token = access_token
         self.client = requests.Session()
-        
+
         #personal token authentication
         if self.access_token:
             self.client.headers['Authorization'] = 'Bearer ' + self.access_token
@@ -217,7 +217,7 @@ class API(EndpointsMixin, object):
         content = response.content.decode('utf-8')
 
         content = json.loads(content)
-        
+
         # error message
         if response.status_code >= 400:
             raise OandaError(content)
