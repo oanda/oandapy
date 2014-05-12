@@ -238,7 +238,7 @@ class Streamer():
         """
 
         if environment == 'practice':
-            self.api_url = 'https://stream-fxpractice.oanda.com/v1/quote'
+            self.api_url = 'https://stream-fxpractice.oanda.com/v1/prices'
         elif environment == 'live':
             self.api_url = 'https://stream-fxtrade.oanda.com/v1/quote'
 
