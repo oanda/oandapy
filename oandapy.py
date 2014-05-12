@@ -268,7 +268,7 @@ class Streamer():
             if response.status_code != 200:
                 self.on_error(response.content)
 
-            for line in response.iter_lines(1):
+            for line in response.iter_lines(90):
                 if not self.connected:
                     break
 
