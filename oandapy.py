@@ -90,7 +90,7 @@ class EndpointsMixin(object):
     def close_order(self, account_id, order_id, **params):
         """ Close an order
         Docs: http://developer.oanda.com/docs/v1/orders/#close-an-order
-        """ 
+        """
         endpoint = 'v1/accounts/%s/orders/%s' % (account_id, order_id)
         return self.request(endpoint, "DELETE", params=params)
 
@@ -181,7 +181,7 @@ class API(EndpointsMixin, object):
 
         self.access_token = access_token
         self.client = requests.Session()
-        
+
         #personal token authentication
         if self.access_token:
             self.client.headers['Authorization'] = 'Bearer ' + self.access_token
@@ -217,7 +217,7 @@ class API(EndpointsMixin, object):
         content = response.content.decode('utf-8')
 
         content = json.loads(content)
-        
+
         # error message
         if response.status_code >= 400:
             raise OandaError(content)
@@ -238,7 +238,7 @@ class Streamer():
         """
 
         if environment == 'practice':
-            self.api_url = 'https://stream-fxpractice.oanda.com/v1/quote'
+            self.api_url = 'https://stream-fxpractice.oanda.com/v1/prices'
         elif environment == 'live':
             self.api_url = 'https://stream-fxtrade.oanda.com/v1/quote'
 
