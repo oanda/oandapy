@@ -279,7 +279,7 @@ class Streamer():
         if environment == 'practice':
             self.api_url = 'https://stream-fxpractice.oanda.com/v1/prices'
         elif environment == 'live':
-            self.api_url = 'https://stream-fxtrade.oanda.com/v1/quote'
+            self.api_url = 'https://stream-fxtrade.oanda.com/v1/prices'
 
         self.access_token = access_token
         self.client = requests.Session()
@@ -312,8 +312,8 @@ class Streamer():
                     break
 
                 if line:
-                    data = json.loads(line)
-                    if not (ignore_heartbeat and data.has_key("heartbeat")):
+                    data = json.loads(line.decode("utf-8"))
+                    if not (ignore_heartbeat and "heartbeat" in data):
                         self.on_success(data)
 
 
