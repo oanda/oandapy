@@ -5,7 +5,6 @@ import requests
 
 """ EndpointsMixin provides a mixin for the API instance
 Parameters that need to be embedded in the API url just need to be passed as a keyword argument.
-
 E.g. oandapy_instance.get_instruments(instruments="EUR_USD")
 """
 class EndpointsMixin(object):
@@ -162,6 +161,44 @@ class EndpointsMixin(object):
         """
         endpoint = 'v1/accounts/%s/transactions/%s' % (account_id, transaction_id)
         return self.request(endpoint)
+        
+    """Forex Labs"""
+    
+    def get_eco_calendar(self, **params):
+        """Returns up to 1 year of economic calendar info
+        Docs: http://developer.oanda.com/rest-live/forex-labs/
+        """
+        endpoint = 'labs/v1/calendar'
+        return self.request(endpoint, params=params)
+        
+    def get_historical_position_ratios(self, **params):
+        """Returns up to 1 year of historical position ratios
+        Docs: http://developer.oanda.com/rest-live/forex-labs/
+        """
+        endpoint = 'labs/v1/historical_position_ratios'
+        return self.request(endpoint, params=params)
+        
+    def get_historical_spreads(self, **params):
+        """Returns up to 1 year of spread information
+        Docs: http://developer.oanda.com/rest-live/forex-labs/
+        """
+        endpoint = 'labs/v1/spreads'
+        return self.request(endpoint, params=params)
+        
+    def get_commitments_of_traders(self, **params):
+        """Returns up to 4 years of Commitments of Traders data from the CFTC
+        Docs: http://developer.oanda.com/rest-live/forex-labs/
+        """
+        endpoint = 'labs/v1/commitments_of_traders'
+        return self.request(endpoint, params=params)
+    
+    def get_orderbook(self, **params):
+        """Returns up to 1 year of OANDA Order book data
+        Docs: http://developer.oanda.com/rest-live/forex-labs/
+        """
+        endpoint = 'labs/v1/orderbook_data'
+        return self.request(endpoint, params=params)
+        
 
 """ Provides functionality for access to core OANDA API calls """
 
@@ -191,7 +228,6 @@ class API(EndpointsMixin, object):
 
     def request(self, endpoint, method='GET', params=None):
         """Returns dict of response from OANDA's open API
-
         :param endpoint: (required) OANDA API endpoint (e.g. v1/instruments)
         :type endpoint: string
         :param method: (optional) Method of accessing data, either GET or POST. (default GET)
@@ -284,7 +320,6 @@ class Streamer():
     def on_success(self, data):
         """ Called when data is successfully retrieved from the stream
         Override this to handle your streaming data.
-
         :param data: response object sent from stream
         """
 
@@ -293,7 +328,6 @@ class Streamer():
     def on_error(self, data):
         """ Called when stream returns non-200 status code
         Override this to handle your streaming data.
-
         :param data: error response object sent from stream
         """
 
@@ -315,4 +349,3 @@ class OandaError(Exception):
         msg = "OANDA API returned error code %s (%s) " % (error_response['code'], error_response['message'])
 
         super(OandaError, self).__init__(msg)
-
