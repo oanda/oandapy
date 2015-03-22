@@ -18,7 +18,7 @@ Include the oandapy module and create an oandapy instance with your account cred
 
 	oanda = oandapy.API(environment="practice", access_token="abcdefghijk...")
 
-Keyword arguments to functions are mapped to the functions available for each endpoint in the [Oanda API docs](http://developer.oanda.com/docs/), so changes to the API aren't held up from you using them by this library. For each api call, oandapy returns a native python object, converted from JSON so you don't have to.
+Keyword arguments to functions are mapped to the functions available for each endpoint in the [Oanda API docs](http://developer.oanda.com/), so changes to the API aren't held up from you using them by this library. For each api call, oandapy returns a native python object, converted from JSON so you don't have to.
 
 The EndpointsMixin class in [oandapy.py](oandapy.py) holds a mixin of all Oanda API endpoints.
 
@@ -73,7 +73,7 @@ The following example prints the first 10 ticks from the stream then disconnects
             self.disconnect()
 
 Initialize an instance of your custom streamer, and start connecting to the stream.
-See http://developer.oanda.com/docs/v1/stream/#rates-streaming for further documentation.
+See http://developer.oanda.com/rest-live/streaming/ for further documentation.
 
     stream = MyStreamer(environment="practice", access_token="abcdefghijk...")
     stream.start(accountId=12345, instruments="EUR_USD,USD_CAD")
