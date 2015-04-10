@@ -38,7 +38,7 @@ Examples
 	account_id = 1813880
 
 	# set the trade to expire after one day
-	trade_expire = datetime.now() + timedelta(days=1)
+	trade_expire = datetime.utcnow() + timedelta(days=1)
 	trade_expire = trade_expire.isoformat("T") + "Z"
 
 	response = oanda.create_order(account_id, 
