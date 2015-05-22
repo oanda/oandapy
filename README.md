@@ -41,7 +41,7 @@ Examples
 	trade_expire = datetime.now() + timedelta(days=1)
 	trade_expire = trade_expire.isoformat("T") + "Z"
 
-	response = oanda.create_order(account_id, 
+	response = oanda.create_order(account_id,
 	    instrument="USD_CAD",
 	    units=1000,
 	    side='sell',
@@ -52,7 +52,7 @@ Examples
 
 Rates Streaming
 ======
-Create a custom streamer class to setup how you want to handle the data. 
+Create a custom streamer class to setup how you want to handle the data.
 Each tick is sent through the `on_success` and `on_error` functions.
 You can override these functions to handle the streaming data.
 
@@ -73,7 +73,7 @@ The following example prints the first 10 ticks from the stream then disconnects
             self.disconnect()
 
 Initialize an instance of your custom streamer, and start connecting to the stream.
-See http://developer.oanda.com/docs/v1/stream/#rates-streaming for further documentation.
+See http://developer.oanda.com/rest-live/streaming/ for further documentation.
 
     stream = MyStreamer(environment="practice", access_token="abcdefghijk...")
     stream.start(accountId=12345, instruments="EUR_USD,USD_CAD")
