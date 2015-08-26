@@ -265,7 +265,7 @@ class API(EndpointsMixin, object):
 
 """HTTPS Streaming"""
 
-class Streamer():
+class Streamer(object):
     """ Provides functionality for HTTPS Streaming
     Docs: http://developer.oanda.com/docs/v1/stream/#rates-streaming
     """
