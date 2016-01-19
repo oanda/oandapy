@@ -5,9 +5,11 @@ oandapy is a python wrapper for OANDA's REST API.
 Install
 ======
 
-python-requests is required. Using pip:
+Using pip:
 
-    $ pip install requests
+    $ pip install git+https://github.com/oanda/oandapy.git
+
+oandapy depends on python-requests, which will be installed automatically.
 
 Usage
 ======
