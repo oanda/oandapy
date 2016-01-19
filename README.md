@@ -20,7 +20,7 @@ Include the oandapy module and create an oandapy instance with your account cred
 
 Keyword arguments to functions are mapped to the functions available for each endpoint in the [Oanda API docs](http://developer.oanda.com/), so changes to the API aren't held up from you using them by this library. For each api call, oandapy returns a native python object, converted from JSON so you don't have to.
 
-The EndpointsMixin class in [oandapy.py](oandapy.py) holds a mixin of all Oanda API endpoints.
+The EndpointsMixin class in [oandapy.py](oandapy/oandapy.py) holds a mixin of all Oanda API endpoints.
 
 Examples
 ======
