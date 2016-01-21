@@ -4,9 +4,12 @@ import requests
 """ OANDA API wrapper for OANDA's REST API """
 
 """ EndpointsMixin provides a mixin for the API instance
-Parameters that need to be embedded in the API url just need to be passed as a keyword argument.
+Parameters that need to be embedded in the API url just need to be passed as a
+keyword argument.
 E.g. oandapy_instance.get_instruments(instruments="EUR_USD")
 """
+
+
 class EndpointsMixin(object):
 
     """Rates"""
@@ -16,21 +19,21 @@ class EndpointsMixin(object):
         Docs: http://developer.oanda.com/rest-live/rates
         """
         params['accountId'] = account_id
-        endpoint  = 'v1/instruments'
+        endpoint = 'v1/instruments'
         return self.request(endpoint, params=params)
 
     def get_prices(self, **params):
         """ Get current prices
         Docs: http://developer.oanda.com/rest-live/rates
         """
-        endpoint  = 'v1/prices'
+        endpoint = 'v1/prices'
         return self.request(endpoint, params=params)
 
     def get_history(self, **params):
         """ Retrieve instrument history
         Docs: http://developer.oanda.com/rest-live/rates
         """
-        endpoint  = 'v1/candles'
+        endpoint = 'v1/candles'
         return self.request(endpoint, params=params)
 
     """Accounts"""
@@ -159,54 +162,59 @@ class EndpointsMixin(object):
         """ Get information for a transaction
         Docs: http://developer.oanda.com/rest-live/transaction-history
         """
-        endpoint = 'v1/accounts/%s/transactions/%s' % (account_id, transaction_id)
+        endpoint = 'v1/accounts/%s/transactions/%s' % \
+                   (account_id, transaction_id)
         return self.request(endpoint)
-        
+
     """Forex Labs"""
-    
+
     def get_eco_calendar(self, **params):
         """Returns up to 1 year of economic calendar info
         Docs: http://developer.oanda.com/rest-live/forex-labs/
         """
         endpoint = 'labs/v1/calendar'
         return self.request(endpoint, params=params)
-        
+
     def get_historical_position_ratios(self, **params):
         """Returns up to 1 year of historical position ratios
         Docs: http://developer.oanda.com/rest-live/forex-labs/
         """
         endpoint = 'labs/v1/historical_position_ratios'
         return self.request(endpoint, params=params)
-        
+
     def get_historical_spreads(self, **params):
         """Returns up to 1 year of spread information
         Docs: http://developer.oanda.com/rest-live/forex-labs/
         """
         endpoint = 'labs/v1/spreads'
         return self.request(endpoint, params=params)
-        
+
     def get_commitments_of_traders(self, **params):
         """Returns up to 4 years of Commitments of Traders data from the CFTC
         Docs: http://developer.oanda.com/rest-live/forex-labs/
         """
         endpoint = 'labs/v1/commitments_of_traders'
         return self.request(endpoint, params=params)
-    
+
     def get_orderbook(self, **params):
         """Returns up to 1 year of OANDA Order book data
         Docs: http://developer.oanda.com/rest-live/forex-labs/
         """
         endpoint = 'labs/v1/orderbook_data'
         return self.request(endpoint, params=params)
-        
+
 
 """ Provides functionality for access to core OANDA API calls """
 
+
 class API(EndpointsMixin, object):
-    def __init__(self, environment="practice", access_token=None, headers=None):
+    def __init__(self,
+                 environment="practice", access_token=None, headers=None):
         """Instantiates an instance of OandaPy's API wrapper
-        :param environment: (optional) Provide the environment for oanda's REST api, either 'sandbox', 'practice', or 'live'. Default: practice
-        :param access_token: (optional) Provide a valid access token if you have one. This is required if the environment is not sandbox.
+        :param environment: (optional) Provide the environment for oanda's
+         REST api, either 'sandbox', 'practice', or 'live'. Default: practice
+        :param access_token: (optional) Provide a valid access token if you
+         have one. This is required if the environment is not sandbox.
         """
 
         if environment == 'sandbox':
@@ -219,24 +227,26 @@ class API(EndpointsMixin, object):
         self.access_token = access_token
         self.client = requests.Session()
 
-        #personal token authentication
+        # personal token authentication
         if self.access_token:
-            self.client.headers['Authorization'] = 'Bearer ' + self.access_token
+            self.client.headers['Authorization'] = 'Bearer '+self.access_token
 
         if headers:
             self.client.headers.update(headers)
 
     def request(self, endpoint, method='GET', params=None):
         """Returns dict of response from OANDA's open API
-        :param endpoint: (required) OANDA API endpoint (e.g. v1/instruments)
+        :param endpoint: (required) OANDA API (e.g. v1/instruments)
         :type endpoint: string
-        :param method: (optional) Method of accessing data, either GET or POST. (default GET)
+        :param method: (optional) Method of accessing data, either GET or POST.
+         (default GET)
         :type method: string
-        :param params: (optional) Dict of parameters (if any) accepted the by OANDA API endpoint you are trying to access (default None)
+        :param params: (optional) Dict of parameters (if any) accepted the by
+         OANDA API endpoint you are trying to access (default None)
         :type params: dict or None
         """
 
-        url = '%s/%s' % ( self.api_url, endpoint)
+        url = '%s/%s' % (self.api_url, endpoint)
 
         method = method.lower()
         params = params or {}
@@ -265,6 +275,7 @@ class API(EndpointsMixin, object):
 
 """HTTPS Streaming"""
 
+
 class Streamer(object):
     """ Provides functionality for HTTPS Streaming
     Docs: http://developer.oanda.com/rest-live/streaming
@@ -272,8 +283,10 @@ class Streamer(object):
 
     def __init__(self, environment="practice", access_token=None):
         """Instantiates an instance of OandaPy's streaming API wrapper.
-        :param environment: (optional) Provide the environment for oanda's REST api, either 'practice', or 'live'. Default: practice
-        :param access_token: (optional) Provide a valid access token if you have one. This is required if the environment is not sandbox.
+        :param environment: (optional) Provide the environment for oanda's
+         REST api, either 'practice', or 'live'. Default: practice
+        :param access_token: (optional) Provide a valid access token if you
+         have one. This is required if the environment is not sandbox.
         """
 
         if environment == 'practice':
@@ -286,15 +299,17 @@ class Streamer(object):
         self.client.stream = True
         self.connected = False
 
-        #personal token authentication
+        # personal token authentication
         if self.access_token:
-            self.client.headers['Authorization'] = 'Bearer ' + self.access_token
+            self.client.headers['Authorization'] = 'Bearer '+self.access_token
 
     def start(self, ignore_heartbeat=True, **params):
         """ Starts the stream with the given parameters
-        :param accountId: (Required) The account that prices are applicable for.
-        :param instruments: (Required) A (URL encoded) comma separated list of instruments to fetch prices for.
-        :param ignore_heartbeat: (optional) Whether or not to display the heartbeat. Default: True
+        :param accountId: (Required) The account that prices are applicable for
+        :param instruments: (Required) A (URL encoded) comma separated list of
+         instruments to fetch prices for.
+        :param ignore_heartbeat: (optional) Whether or not to display the
+         heartbeat. Default: True
         """
         self.connected = True
 
@@ -315,7 +330,6 @@ class Streamer(object):
                     data = json.loads(line.decode("utf-8"))
                     if not (ignore_heartbeat and "heartbeat" in data):
                         self.on_success(data)
-
 
     def on_success(self, data):
         """ Called when data is successfully retrieved from the stream
@@ -339,13 +353,15 @@ class Streamer(object):
         self.connected = False
 
 
-""" Contains OANDA exception
-"""
+""" Contains OANDA exception """
+
+
 class OandaError(Exception):
     """ Generic error class, catches oanda response errors
     """
 
     def __init__(self, error_response):
-        msg = "OANDA API returned error code %s (%s) " % (error_response['code'], error_response['message'])
+        msg = "OANDA API returned error code %s (%s) " % \
+              (error_response['code'], error_response['message'])
 
         super(OandaError, self).__init__(msg)
