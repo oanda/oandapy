@@ -13,7 +13,7 @@ class EndpointsMixin(object):
 
     def get_instruments(self, account_id, **params):
         """ Get an instrument list
-        Docs: http://developer.oanda.com/docs/v1/rates/#get-an-instrument-list
+        Docs: http://developer.oanda.com/rest-live/rates
         """
         params['accountId'] = account_id
         endpoint  = 'v1/instruments'
@@ -21,14 +21,14 @@ class EndpointsMixin(object):
 
     def get_prices(self, **params):
         """ Get current prices
-        Docs: http://developer.oanda.com/docs/v1/rates/#get-current-prices
+        Docs: http://developer.oanda.com/rest-live/rates
         """
         endpoint  = 'v1/prices'
         return self.request(endpoint, params=params)
 
     def get_history(self, **params):
         """ Retrieve instrument history
-        Docs: http://developer.oanda.com/docs/v1/rates/#retrieve-instrument-history
+        Docs: http://developer.oanda.com/rest-live/rates
         """
         endpoint  = 'v1/candles'
         return self.request(endpoint, params=params)
@@ -37,21 +37,21 @@ class EndpointsMixin(object):
 
     def create_account(self, **params):
         """ Create an account. Valid only in sandbox.
-        Docs: http://developer.oanda.com/docs/v1/accounts/#get-accounts-for-a-user
+        Docs: http://developer.oanda.com/rest-live/accounts
         """
         endpoint = 'v1/accounts'
         return self.request(endpoint, "POST", params=params)
 
     def get_accounts(self, **params):
         """ Get accounts for a user.
-        Docs: http://developer.oanda.com/docs/v1/accounts/#get-accounts-for-a-user
+        Docs: http://developer.oanda.com/rest-live/accounts
         """
         endpoint = 'v1/accounts'
         return self.request(endpoint, params=params)
 
     def get_account(self, account_id, **params):
         """ Get account information
-        Docs: http://developer.oanda.com/docs/v1/accounts/#get-account-information
+        Docs: http://developer.oanda.com/rest-live/accounts
         """
         endpoint = 'v1/accounts/%s' % (account_id)
         return self.request(endpoint, params=params)
@@ -60,35 +60,35 @@ class EndpointsMixin(object):
 
     def get_orders(self, account_id, **params):
         """ Get orders for an account
-        Docs: http://developer.oanda.com/docs/v1/orders/#get-orders-for-an-account
+        Docs: http://developer.oanda.com/rest-live/orders
         """
         endpoint = 'v1/accounts/%s/orders' % (account_id)
         return self.request(endpoint, params=params)
 
     def create_order(self, account_id, **params):
         """ Create a new order
-        Docs: http://developer.oanda.com/docs/v1/orders/#create-a-new-order
+        Docs: http://developer.oanda.com/rest-live/orders
         """
         endpoint = 'v1/accounts/%s/orders' % (account_id)
         return self.request(endpoint, "POST", params=params)
 
     def get_order(self, account_id, order_id, **params):
         """ Get information for an order
-        Docs: http://developer.oanda.com/docs/v1/orders/#get-information-for-an-order
+        Docs: http://developer.oanda.com/rest-live/orders
         """
         endpoint = 'v1/accounts/%s/orders/%s' % (account_id, order_id)
         return self.request(endpoint, params=params)
 
     def modify_order(self, account_id, order_id, **params):
         """ Modify an existing order
-        Docs: http://developer.oanda.com/docs/v1/orders/#modify-an-existing-order
+        Docs: http://developer.oanda.com/rest-live/orders
         """
         endpoint = 'v1/accounts/%s/orders/%s' % (account_id, order_id)
         return self.request(endpoint, "PATCH", params=params)
 
     def close_order(self, account_id, order_id, **params):
         """ Close an order
-        Docs: http://developer.oanda.com/docs/v1/orders/#close-an-order
+        Docs: http://developer.oanda.com/rest-live/orders
         """
         endpoint = 'v1/accounts/%s/orders/%s' % (account_id, order_id)
         return self.request(endpoint, "DELETE", params=params)
@@ -97,28 +97,28 @@ class EndpointsMixin(object):
 
     def get_trades(self, account_id, **params):
         """ Get a list of open trades
-        Docs: http://developer.oanda.com/docs/v1/trades/#get-a-list-of-open-trades
+        Docs: http://developer.oanda.com/rest-live/trades
         """
         endpoint = 'v1/accounts/%s/trades' % (account_id)
         return self.request(endpoint, params=params)
 
     def get_trade(self, account_id, trade_id, **params):
         """ Get information on a specific trade
-        Docs: http://developer.oanda.com/docs/v1/trades/#get-information-on-a-specific-trade
+        Docs: http://developer.oanda.com/rest-live/trades
         """
         endpoint = 'v1/accounts/%s/trades/%s' % (account_id, trade_id)
         return self.request(endpoint, params=params)
 
     def modify_trade(self, account_id, trade_id, **params):
         """ Modify an existing trade
-        Docs: http://developer.oanda.com/docs/v1/trades/#modify-an-existing-trade
+        Docs: http://developer.oanda.com/rest-live/trades
         """
         endpoint = 'v1/accounts/%s/trades/%s' % (account_id, trade_id)
         return self.request(endpoint, "PATCH", params=params)
 
     def close_trade(self, account_id, trade_id, **params):
         """ Close an open trade
-        Docs: http://developer.oanda.com/docs/v1/trades/#close-an-open-trade
+        Docs: http://developer.oanda.com/rest-live/trades
         """
         endpoint = 'v1/accounts/%s/trades/%s' % (account_id, trade_id)
         return self.request(endpoint, "DELETE", params=params)
@@ -127,21 +127,21 @@ class EndpointsMixin(object):
 
     def get_positions(self, account_id, **params):
         """ Get a list of all open positions
-        Docs: http://developer.oanda.com/docs/v1/positions/#get-a-list-of-all-open-positions
+        Docs: http://developer.oanda.com/rest-live/positions
         """
         endpoint = 'v1/accounts/%s/positions' % (account_id)
         return self.request(endpoint, params=params)
 
     def get_position(self, account_id, instrument, **params):
         """ Get the position for an instrument
-        Docs: http://developer.oanda.com/docs/v1/positions/#get-the-position-for-an-instrument
+        Docs: http://developer.oanda.com/rest-live/positions
         """
         endpoint = 'v1/accounts/%s/positions/%s' % (account_id, instrument)
         return self.request(endpoint, params=params)
 
     def close_position(self, account_id, instrument, **params):
         """ Close an existing position
-        Docs: http://developer.oanda.com/docs/v1/positions/#close-an-existing-position
+        Docs: http://developer.oanda.com/rest-live/positions
         """
         endpoint = 'v1/accounts/%s/positions/%s' % (account_id, instrument)
         return self.request(endpoint, "DELETE", params=params)
@@ -150,14 +150,14 @@ class EndpointsMixin(object):
 
     def get_transaction_history(self, account_id, **params):
         """ Get transaction history
-        Docs: http://developer.oanda.com/docs/v1/transactions/#get-transaction-history
+        Docs: http://developer.oanda.com/rest-live/transaction-history
         """
         endpoint = 'v1/accounts/%s/transactions' % (account_id)
         return self.request(endpoint, params=params)
 
     def get_transaction(self, account_id, transaction_id):
         """ Get information for a transaction
-        Docs: http://developer.oanda.com/docs/v1/transactions/#get-information-for-a-transaction
+        Docs: http://developer.oanda.com/rest-live/transaction-history
         """
         endpoint = 'v1/accounts/%s/transactions/%s' % (account_id, transaction_id)
         return self.request(endpoint)
@@ -267,7 +267,7 @@ class API(EndpointsMixin, object):
 
 class Streamer(object):
     """ Provides functionality for HTTPS Streaming
-    Docs: http://developer.oanda.com/docs/v1/stream/#rates-streaming
+    Docs: http://developer.oanda.com/rest-live/streaming
     """
 
     def __init__(self, environment="practice", access_token=None):
