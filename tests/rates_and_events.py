@@ -11,19 +11,11 @@ class DisconnectException(Exception):
 
 
 class MyStream(oandapy.Streamer):
-    """
-        class to parse the OANDA stream
-        tick records are processed into candles of different timeframes
-        candles that are ready are processed by the plugin manager
-    """
+
     def __init__(self, count=10, *args, **kwargs):
         super(MyStream, self).__init__(*args, **kwargs)
         self.count = count
         self.reccnt = 0
-
-    def run(self, endpoint, ignore_heartbeat=False, **params):
-        # We want the heartbeats
-        super(MyStream, self).run(endpoint, ignore_heartbeat, **params)
 
     def on_success(self, data):
         print data, "\n"
