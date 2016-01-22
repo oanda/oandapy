@@ -23,6 +23,7 @@ setup(name='oandapy',
       url='http://developer.oanda.com/',
       license='MIT',
       packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
+      test_suite="tests",
       include_package_data=True,
       zip_safe=False,
       install_requires=[
