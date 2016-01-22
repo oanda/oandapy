@@ -63,9 +63,10 @@ class Streamer(EndpointsMixin, object):
         warnings.warn("Streamer() supports the use of multiple endpoints "
                       "use the rates() method instead",
                       stacklevel=2)
-        self.run("v1/prices", ignore_heartbeat=ignore_heartbeat, params=params)
+        params['ignore_heartbeat'] = ignore_heartbeat
+        self.run("v1/prices", params=params)
 
-    def run(self, endpoint, ignore_heartbeat=True, params=None):
+    def run(self, endpoint, params=None):
         """ Starts the stream with the given parameters
         :param accountId: (Required) The account that prices are applicable for
         :param instruments: (Required) A (URL encoded) comma separated list of
@@ -76,6 +77,11 @@ class Streamer(EndpointsMixin, object):
         self.connected = True
 
         params = params or {}
+
+        ignore_heartbeat = None
+        if "ignore_heartbeat" in params:
+            ignore_heartbeat = params['ignore_heartbeat']
+
         request_args = {}
         request_args['params'] = params
 
