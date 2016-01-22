@@ -1,3 +1,5 @@
+import warnings
+
 import json
 import requests
 from abc import ABCMeta, abstractmethod
@@ -7,9 +9,28 @@ from abc import ABCMeta, abstractmethod
 """ HTTPS Streaming """
 
 
-class Streamer(object):
+class EndpointsMixin(object):
+
+    """Stream"""
+
+    def rates(self, account_id, **params):
+        """ Get streaming rates
+        Docs: http://developer.oanda.com/rest-live/streaming
+        """
+        params['accountId'] = account_id
+        endpoint = 'v1/prices'
+        return self.run(endpoint, params=params)
+
+    def events(self, **params):
+        """ Get streaming events
+        Docs: http://developer.oanda.com/rest-live/streaming
+        """
+        endpoint = 'v1/events'
+        return self.run(endpoint, params=params)
+
+
+class Streamer(EndpointsMixin, object):
     """ Provides functionality for HTTPS Streaming
-    Docs: http://developer.oanda.com/rest-live/streaming
     """
     __metaclass__ = ABCMeta
 
@@ -22,9 +43,9 @@ class Streamer(object):
         """
 
         if environment == 'practice':
-            self.api_url = 'https://stream-fxpractice.oanda.com/v1/prices'
+            self.api_url = 'https://stream-fxpractice.oanda.com'
         elif environment == 'live':
-            self.api_url = 'https://stream-fxtrade.oanda.com/v1/prices'
+            self.api_url = 'https://stream-fxtrade.oanda.com'
 
         self.access_token = access_token
         self.client = requests.Session()
@@ -36,6 +57,15 @@ class Streamer(object):
             self.client.headers['Authorization'] = 'Bearer '+self.access_token
 
     def start(self, ignore_heartbeat=True, **params):
+        """ This method only serves backwards compatibility with the
+            pre-EndpointsMixin version that only streamed prices
+        """
+        warnings.warn("Streamer() supports the use of multiple endpoints "
+                      "use the rates() method instead",
+                      stacklevel=2)
+        self.run("v1/prices", ignore_heartbeat=ignore_heartbeat, params=params)
+
+    def run(self, endpoint, ignore_heartbeat=True, params=None):
         """ Starts the stream with the given parameters
         :param accountId: (Required) The account that prices are applicable for
         :param instruments: (Required) A (URL encoded) comma separated list of
@@ -45,11 +75,14 @@ class Streamer(object):
         """
         self.connected = True
 
+        params = params or {}
         request_args = {}
         request_args['params'] = params
 
+        url = '%s/%s' % (self.api_url, endpoint)
+
         while self.connected:
-            response = self.client.get(self.api_url, **request_args)
+            response = self.client.get(url, **request_args)
 
             if response.status_code != 200:
                 self.on_error(response.content)
