@@ -1,5 +1,6 @@
 import json
 import requests
+from abc import ABCMeta, abstractmethod
 
 """ OANDA API wrapper for OANDA's REST API """
 
@@ -10,6 +11,7 @@ class Streamer(object):
     """ Provides functionality for HTTPS Streaming
     Docs: http://developer.oanda.com/rest-live/streaming
     """
+    __metaclass__ = ABCMeta
 
     def __init__(self, environment="practice", access_token=None):
         """Instantiates an instance of OandaPy's streaming API wrapper.
@@ -61,6 +63,7 @@ class Streamer(object):
                     if not (ignore_heartbeat and "heartbeat" in data):
                         self.on_success(data)
 
+    @abstractmethod
     def on_success(self, data):
         """ Called when data is successfully retrieved from the stream
         Override this to handle your streaming data.
@@ -69,6 +72,7 @@ class Streamer(object):
 
         return True
 
+    @abstractmethod
     def on_error(self, data):
         """ Called when stream returns non-200 status code
         Override this to handle your streaming data.
