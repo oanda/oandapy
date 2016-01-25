@@ -1,1 +1,1 @@
-from oandapy import *
+from .oandapy import *
