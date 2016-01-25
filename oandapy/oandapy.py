@@ -361,6 +361,7 @@ class OandaError(Exception):
     """
 
     def __init__(self, error_response):
+        self.error_response = error_response
         msg = "OANDA API returned error code %s (%s) " % \
               (error_response['code'], error_response['message'])
 
