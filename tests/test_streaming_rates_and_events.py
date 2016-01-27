@@ -1,9 +1,14 @@
 import unittest
 import oandapy
 import sys
+from . import unittestsetup
+from .unittestsetup import environment as environment
 
 access_token = None
 account = None
+api = None
+
+instruments = ["EUR_USD", "EUR_JPY", "US30_USD", "DE30_EUR"]
 
 
 class DisconnectException(Exception):
@@ -29,31 +34,28 @@ class MyStream(oandapy.Streamer):
 
 
 class TestRates(unittest.TestCase):
+
     def setUp(self):
         global access_token
         global account
-        with open("tests/token.txt") as T:
-                access_token = T.read().strip()
-        with open("tests/account.txt") as T:
-                account = T.read().strip()
 
-        if account == "9999999":
-            print("\n***************************************************\n"
-                    "*** PLEASE PROVIDE YOUR account AND token IN   ****\n"
-                    "*** account.txt AND token.txt TO RUN THE TESTS ****\n"
-                    "***************************************************\n")
+        try:
+            account, access_token = unittestsetup.auth()
+        except Exception as e:
+            print("%s" % e)
+            exit(0)
 
-    def test_Rates(self):
+    def test__Rates(self):
         count = 10
         r = MyStream(access_token=access_token,
-                     environment="practice", count=count)
-        r.rates(account, instruments="EUR_USD,EUR_JPY,US30_USD,DE30_EUR")
+                     environment=environment, count=count)
+        r.rates(account, instruments=",".join(instruments))
         self.assertEqual(count, r.reccnt)
 
-    def test_Events(self):
+    def test__Events(self):
         count = 4
         r = MyStream(access_token=access_token,
-                     environment="practice", count=count)
+                     environment=environment, count=count)
         r.events(ignore_heartbeat=False)
         self.assertEqual(count, r.reccnt)
 
