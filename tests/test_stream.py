@@ -1,9 +1,12 @@
 import unittest
 import oandapy
 import sys
+from . import unittestsetup
+from .unittestsetup import environment as environment
 
 access_token = None
 account = None
+api = None
 
 
 class Stream(oandapy.Streamer):
@@ -17,10 +20,6 @@ class Stream(oandapy.Streamer):
         self.count = count
         self.reccnt = 0
         self.hbcnt = 0
-
-    # in case we want heartbeats by default: override start()
-    # def start(self, ignore_heartbeat=False, **params):
-    #     super(Stream, self).start(ignore_heartbeat=ignore_heartbeat, **params)
 
     def on_success(self, data):
         print data, "\n"
@@ -37,21 +36,19 @@ class Stream(oandapy.Streamer):
 
 
 class TestRates(unittest.TestCase):
+
     def setUp(self):
         global access_token
         global account
-        with open("tests/token.txt") as T:
-                access_token = T.read().strip()
-        with open("tests/account.txt") as T:
-                account = T.read().strip()
-        if account == "9999999":
-            warning = """
-             ***************************************************
-             *** PLEASE PROVIDE YOUR account AND token IN   ****
-             *** account.txt AND token.txt TO RUN THE TESTS ****
-             ***************************************************
-             """
-            print warning
+        global api
+        # self.maxDiff = None
+        try:
+            account, access_token = unittestsetup.auth()
+        except Exception as e:
+            print("%s" % e)
+            exit(0)
+
+        api = oandapy.API(environment=environment, access_token=access_token)
 
     def test_Rates(self):
         """ get records from stream and including heartbeats,
@@ -60,7 +57,7 @@ class TestRates(unittest.TestCase):
         count = 100
         count = 10
         instruments = ["EUR_USD", "US30_USD", "DE30_EUR"]
-        r = Stream(access_token=access_token, environment="practice",
+        r = Stream(access_token=access_token, environment=environment,
                    count=count)
         r.start(accountId=account, ignore_heartbeat=False,
                 instruments=",".join(instruments))
@@ -72,7 +69,7 @@ class TestRates(unittest.TestCase):
         """
         count = 100
         instruments = ["EUR_USD", "US30_USD", "DE30_EUR"]
-        r = Stream(access_token=access_token, environment="practice",
+        r = Stream(access_token=access_token, environment=environment,
                    count=count)
         r.start(accountId=account, ignore_heartbeat=True,
                 instruments=",".join(instruments))
