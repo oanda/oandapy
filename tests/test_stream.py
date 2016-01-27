@@ -22,7 +22,7 @@ class Stream(oandapy.Streamer):
         self.hbcnt = 0
 
     def on_success(self, data):
-        print data, "\n"
+        print(data)
         if "heartbeat" in data:
             self.hbcnt += 1
         else:
