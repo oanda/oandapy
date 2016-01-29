@@ -4,6 +4,12 @@ import sys
 from . import unittestsetup
 from .unittestsetup import environment as environment
 
+try:
+    from nose_parameterized import parameterized, param
+except:
+    print("*** Please install 'nose_parameterized' to run these tests ***")
+    exit(0)
+
 access_token = None
 account = None
 api = None
@@ -50,31 +56,21 @@ class TestRates(unittest.TestCase):
 
         api = oandapy.API(environment=environment, access_token=access_token)
 
-    def test_Rates(self):
-        """ get records from stream and including heartbeats,
-            #recs received should equal #recs requested + # hb recs
-        """
-        count = 100
-        count = 10
+    @parameterized.expand([(25, False),
+                           (25, True)])
+    def test_Rates(self, count, ignore_heartbeat=False):
+        """ get records from stream """
+        # recs received should equal #recs requested + # hb recs
         instruments = ["EUR_USD", "US30_USD", "DE30_EUR"]
         r = Stream(access_token=access_token, environment=environment,
                    count=count)
-        r.start(accountId=account, ignore_heartbeat=False,
-                instruments=",".join(instruments))
-        self.assertEqual(count, r.reccnt + r.hbcnt)
-
-    def test_RatesNoHeartBeats(self):
-        """ get records from stream and ignore heartbeats,
-            #recs received should equal #recs requested
-        """
-        count = 100
-        instruments = ["EUR_USD", "US30_USD", "DE30_EUR"]
-        r = Stream(access_token=access_token, environment=environment,
-                   count=count)
-        r.start(accountId=account, ignore_heartbeat=True,
+        r.start(accountId=account, ignore_heartbeat=ignore_heartbeat,
                 instruments=",".join(instruments))
 
-        self.assertEqual(count, r.reccnt)
+        if ignore_heartbeat:
+            self.assertEqual(count, r.reccnt)
+        else:
+            self.assertEqual(count, r.reccnt + r.hbcnt)
 
 
 if __name__ == "__main__":
