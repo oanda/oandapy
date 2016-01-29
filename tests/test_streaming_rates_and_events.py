@@ -4,6 +4,12 @@ import sys
 from . import unittestsetup
 from .unittestsetup import environment as environment
 
+try:
+    from nose_parameterized import parameterized, param
+except:
+    print("*** Please install 'nose_parameterized' to run these tests ***")
+    exit(0)
+
 access_token = None
 account = None
 api = None
@@ -56,29 +62,30 @@ class TestRates(unittest.TestCase):
 
         api = oandapy.API(environment=environment, access_token=access_token)
 
-    def test__Rates(self):
-        """ get records from stream and including heartbeats,
-            #recs received should equal #recs requested + # hb recs
-        """
-        count = 10
-        r = Stream(access_token=access_token,
-                   environment=environment, count=count)
-        r.rates(account, instruments=",".join(instruments))
-        self.assertEqual(count, r.reccnt + r.hbcnt)
-
-    def test_RatesNoHeartBeats(self):
-        """ get records from stream and ignore heartbeats,
-            #recs received should equal #recs requested
-        """
-        count = 100
+    @parameterized.expand([(25, False),
+                           (25, True)])
+    def test_Rates(self, count, ignore_heartbeat=False):
+        """ get records from stream """
+        # recs received should equal #recs requested + # hb recs
+        instruments = ["EUR_USD", "US30_USD", "DE30_EUR"]
         r = Stream(access_token=access_token, environment=environment,
                    count=count)
-        r.rates(account, ignore_heartbeat=True,
+        r.rates(account, ignore_heartbeat=ignore_heartbeat,
                 instruments=",".join(instruments))
-        self.assertEqual(count, r.reccnt)
 
-    def test__Events(self):
-        count = 4
+        if ignore_heartbeat:
+            self.assertEqual(count, r.reccnt)
+        else:
+            self.assertEqual(count, r.reccnt + r.hbcnt)
+
+    @parameterized.expand([(4, False),
+                           ])
+    def test__Events(self, count, ignore_heartbeat=False):
+        """ get account events from stream """
+        # if ignoring heartbeats this test will keep waiting
+        # this could be solved by creating trades in parallel that
+        # generate events
+        # heartbeats are every 15 sec.
         r = Stream(access_token=access_token,
                    environment=environment, count=count)
         r.events(ignore_heartbeat=False)
