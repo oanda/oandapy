@@ -50,6 +50,8 @@ class Streamer(EndpointsMixin, object):
             self.api_url = 'https://stream-fxpractice.oanda.com'
         elif environment == 'live':
             self.api_url = 'https://stream-fxtrade.oanda.com'
+        else:
+            raise StreamerError("Environment '%s' does not exist" % environment)
 
         self.access_token = access_token
         self.client = requests.Session()
@@ -125,3 +127,8 @@ class Streamer(EndpointsMixin, object):
         """ Manually disconnects the streaming client
         """
         self.connected = False
+
+
+class StreamerError(Exception):
+    def __init__(self, msg):
+        super(StreamerError, self).__init__(msg)
