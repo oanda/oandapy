@@ -13,11 +13,12 @@ class EndpointsMixin(object):
 
     """Stream"""
 
-    def rates(self, account_id, **params):
+    def rates(self, account_id, instruments, **params):
         """ Get streaming rates
         Docs: http://developer.oanda.com/rest-live/streaming
         """
         params['accountId'] = account_id
+        params['instruments'] = instruments
         endpoint = 'v1/prices'
         return self.run(endpoint, params=params)
 
