@@ -39,12 +39,11 @@ class Streamer(EndpointsMixin, object):
     """
     __metaclass__ = ABCMeta
 
-    def __init__(self, environment="practice", access_token=None):
+    def __init__(self, environment, access_token):
         """Instantiates an instance of OandaPy's streaming API wrapper.
-        :param environment: (optional) Provide the environment for oanda's
-         REST api, either 'practice', or 'live'. Default: practice
-        :param access_token: (optional) Provide a valid access token if you
-         have one. This is required if the environment is not sandbox.
+        :param environment: (required) Provide the environment for oanda's
+         REST api, either 'practice', or 'live'.
+        :param access_token: (required)
         """
 
         if environment == 'practice':
