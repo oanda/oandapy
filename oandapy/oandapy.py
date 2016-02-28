@@ -1,5 +1,6 @@
 import json
 import requests
+from exceptions import BadEnvironment
 
 """ OANDA API wrapper for OANDA's REST API """
 
@@ -223,6 +224,8 @@ class API(EndpointsMixin, object):
             self.api_url = 'https://api-fxpractice.oanda.com'
         elif environment == 'live':
             self.api_url = 'https://api-fxtrade.oanda.com'
+        else:
+            raise BadEnvironment(environment)
 
         self.access_token = access_token
         self.client = requests.Session()
