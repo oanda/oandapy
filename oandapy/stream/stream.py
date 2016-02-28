@@ -2,6 +2,7 @@ import warnings
 
 import json
 import requests
+from exceptions import BadEnvironment
 from abc import ABCMeta, abstractmethod
 
 """ OANDA API wrapper for OANDA's REST API """
@@ -51,7 +52,7 @@ class Streamer(EndpointsMixin, object):
         elif environment == 'live':
             self.api_url = 'https://stream-fxtrade.oanda.com'
         else:
-            raise StreamerError("Environment '%s' does not exist" % environment)
+            raise BadEnvironment(environment)
 
         self.access_token = access_token
         self.client = requests.Session()
