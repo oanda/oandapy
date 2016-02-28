@@ -16,6 +16,9 @@ class EndpointsMixin(object):
     def rates(self, account_id, instruments, **params):
         """ Get streaming rates
         Docs: http://developer.oanda.com/rest-live/streaming
+        :param accountId: (Required) The account that prices are applicable for
+        :param instruments: (Required) A (URL encoded) comma separated list of
+         instruments to fetch prices for.
         """
         params['accountId'] = account_id
         params['instruments'] = instruments
@@ -69,9 +72,6 @@ class Streamer(EndpointsMixin, object):
 
     def run(self, endpoint, params=None):
         """ Starts the stream with the given parameters
-        :param accountId: (Required) The account that prices are applicable for
-        :param instruments: (Required) A (URL encoded) comma separated list of
-         instruments to fetch prices for.
         :param ignore_heartbeat: (optional) Whether or not to display the
          heartbeat. Default: True
         """
