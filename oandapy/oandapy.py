@@ -1,6 +1,6 @@
 import json
 import requests
-from exceptions import BadEnvironment
+from .exceptions import BadEnvironment
 
 """ OANDA API wrapper for OANDA's REST API """
 
@@ -275,17 +275,3 @@ class API(EndpointsMixin, object):
             raise OandaError(content)
 
         return content
-
-""" Contains OANDA exception """
-
-
-class OandaError(Exception):
-    """ Generic error class, catches oanda response errors
-    """
-
-    def __init__(self, error_response):
-        self.error_response = error_response
-        msg = "OANDA API returned error code %s (%s) " % \
-              (error_response['code'], error_response['message'])
-
-        super(OandaError, self).__init__(msg)
