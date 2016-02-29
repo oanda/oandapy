@@ -91,6 +91,12 @@ class TestRates(unittest.TestCase):
         r.events(ignore_heartbeat=False)
         self.assertEqual(count, r.reccnt + r.hbcnt)
 
+    def test__Environment(self):
+        """ test BadEnvironment exception """
+        with self.assertRaises(oandapy.BadEnvironment) as envErr:
+            s = Stream(access_token=access_token,
+                       environment="nothing", count=10)
+        self.assertTrue(isinstance(envErr.exception, oandapy.BadEnvironment))
 
 if __name__ == "__main__":
 
