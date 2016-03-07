@@ -56,26 +56,39 @@ Rates Streaming
 ======
 Create a custom streamer class to setup how you want to handle the data.
 Each tick is sent through the `on_success` and `on_error` functions.
-You can override these functions to handle the streaming data.
+Since these methods are abstract methods, you need to override these methods
+to handle the streaming data.
 
-The following example prints the first 10 ticks from the stream then disconnects.
+The following example prints _count_ ticks from the stream then disconnects.
+
 
     class MyStreamer(oandapy.Streamer):
-        def __init__(self, *args, **kwargs):
-            oandapy.Streamer.__init__(self, *args, **kwargs)
-            self.ticks = 0
+        def __init__(self, count=10, *args, **kwargs):
+            super(MyStreamer, self).__init__(*args, **kwargs)
+            self.count = count
+            self.reccnt = 0
 
         def on_success(self, data):
-            self.ticks += 1
-            print data
-            if self.ticks == 10:
+            print data, "\n"
+            self.reccnt += 1
+            if self.reccnt == self.count:
                 self.disconnect()
 
         def on_error(self, data):
             self.disconnect()
 
+
 Initialize an instance of your custom streamer, and start connecting to the stream.
 See http://developer.oanda.com/rest-live/streaming/ for further documentation.
 
+    account = "12345"
     stream = MyStreamer(environment="practice", access_token="abcdefghijk...")
-    stream.start(accountId=12345, instruments="EUR_USD,USD_CAD")
+    stream.rates(account, instruments="EUR_USD,EUR_JPY,US30_USD,DE30_EUR")
+
+
+The same procedure can be used for streaming events.
+
+
+    stream = MyStreamer(environment="practice", access_token="abcdefghijk...")
+    stream.events(ignore_heartbeat=False)
+
