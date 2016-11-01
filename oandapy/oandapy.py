@@ -204,6 +204,13 @@ class EndpointsMixin(object):
         endpoint = 'labs/v1/orderbook_data'
         return self.request(endpoint, params=params)
 
+    def get_autochartist(self, **params):
+        """Returns 'Our favourites; signals from Autochartist.
+        Docs: http://developer.oanda.com/rest-live/forex-labs/
+        """
+        endpoint = '/labs/v1/signal/autochartist'
+        return self.request(endpoint, params=params)
+
 
 """ Provides functionality for access to core OANDA API calls """
 
